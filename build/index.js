@@ -11,4 +11,19 @@ app.get("/", (req, res) => {
     res.send("Main!");
 });
 app.use("/api", index_1.default);
+app.get("/info", (req, res) => {
+    res.send(`<div>
+  <h2>Info</h2>
+  </div>`);
+});
+app.get("/invalid", (req, res) => {
+    res.send(`<div>
+  <h2>Error : Invalid url</h2>
+  go to <a href="${req.protocol}://${req.get("host")}/info">Info</a>
+  </div>`);
+});
+app.get("*", (req, res) => {
+    res.redirect(`${req.protocol}://${req.get("host")}/invalid`);
+});
 app.listen(port, () => console.log(`running on http://localhost:${port}`));
+exports.default = app;

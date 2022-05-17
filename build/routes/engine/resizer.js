@@ -20,16 +20,19 @@ resizer.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { height, width, filename } = req.query;
     // image full path and name with format
     const path = `images/source/${filename}.jpg`;
-    const name = `${filename}_${width}X${height}px.jpg`;
+    const name = `${filename}_${width}x${height}px.jpg`;
     (0, sharp_1.default)(path)
         .resize(parseInt(width), parseInt(height))
         .png()
         .toBuffer()
         .then((data) => {
         (0, utils_1.writeFiles)(name, data);
-        res.type("png").send(data);
+        res.status(200).type("png").send(data);
     })
-        .catch((err) => console.log(err));
-    console.log({ width, height, filename });
+        .catch((err) => {
+        console.log(err);
+        res.status(404).send(`
+      <p>🙂Error🤷‍♂️: there is no images with this name! =>> ${filename} 🙄<p>`);
+    });
 }));
 exports.default = resizer;

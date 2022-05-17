@@ -23,8 +23,6 @@ resizer.get("/", async (req, res) => {
       res.status(404).send(`
       <p>🙂Error🤷‍♂️: there is no images with this name! =>> ${filename} 🙄<p>`);
     });
-
-  console.log({ width, height, filename });
 });
 
 export default resizer;
