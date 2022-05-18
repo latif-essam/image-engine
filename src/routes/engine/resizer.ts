@@ -19,7 +19,6 @@ resizer.get("/", async (req, res) => {
       res.status(200).type("png").send(data);
     })
     .catch((err) => {
-      console.log(err);
       res.status(404).send(`
       <p>🙂Error🤷‍♂️: there is no images with this name! =>> ${filename} 🙄<p>`);
     });
