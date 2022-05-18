@@ -35,7 +35,8 @@ Image-Engine is a an Image Processing API application that provides various feat
 
 ## Available Scripts
 
-> Note :you have to prefix each command with `npm run scriptName`
+> Note :you have to prefix each command with `npm run scriptName`.
+
 > Also Note :when building the project copy the static html files and paste them on the production folder as they are not included in the build folder.
 
 | scripts  | frunctionality                                                          |
