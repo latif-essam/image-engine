@@ -3,9 +3,9 @@ import app from "../../index";
 
 const req = supertest(app);
 
-describe("API routes endpoint", () => {
-  it("Should display a response when visit /api end-point route:", async () => {
-    const res = await req.get("/api");
+describe("Helpers Suite", () => {
+  it("Should display Instuctions when visit /api/engine end-point route:", async () => {
+    const res = await req.get("/api/engine");
     expect(res.status).toBe(200);
   });
 });
