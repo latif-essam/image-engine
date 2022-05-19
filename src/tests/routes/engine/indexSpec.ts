@@ -1,32 +1,28 @@
+import path from "path";
 import sharp from "sharp";
 import supertest from "supertest";
 import { isImgAvailable } from "../../../helpers/images";
-import { getPath, writeFiles } from "../../../helpers/utils";
+import { getPath, source, writeFiles } from "../../../helpers/utils";
 import app from "../../../index";
+import resizerService from "./../../../services/resizerService";
 
 const req = supertest(app);
 
 describe("Testing Image Proccessing APIs", () => {
   const { height, width, filename } = {
     filename: "autom",
-    height: 500,
     width: 300,
+    height: 500,
   };
   const imgName = `${filename}_${width}x${height}px`;
-  const imgPath = `${getPath("source")}/${filename}.jpg`;
+  const imgPath = path.join(source, `/${filename}.jpg`);
   it("Resizer >> Should resize  image with the given dimensions", async () => {
-    await req.get("/api/engine/resizer?filename=autom&width=300&height=500");
+    await resizerService(filename as string, width, height);
+    const availability = await (
+      await isImgAvailable(imgName, getPath("output"))
+    ).valueOf();
 
-    sharp(imgPath)
-      .resize(width, height)
-      .png()
-      .toBuffer()
-      .then((data) => {
-        writeFiles(imgName, data as never);
-      });
-    await isImgAvailable(imgName, getPath("output")).then((value) => {
-      expect(value).toBe(true);
-    });
+    expect(availability).toBe(true);
   });
 
   it("Resizer >> Should render resized image (cached) with the same dimensions", async () => {

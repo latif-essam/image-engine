@@ -5,6 +5,8 @@ import { createCanvas } from "canvas";
 const getPath = (type: string): string =>
   path.join(__dirname, `../../images/${type}`);
 
+const output = path.join(__dirname, "../../images/output");
+const source = path.join(__dirname, "../../images/source");
 const writeFiles = async (
   name: string,
   data: "string | Stream | ArrayBufferView | Iterable<string | ArrayBufferView> | AsyncIterable<string | ArrayBufferView>"
@@ -25,4 +27,4 @@ const createPlaceholder = (width: number, height: number, color: string) => {
   return { context, canvas };
 };
 
-export { writeFiles, createPlaceholder, getPath };
+export { writeFiles, createPlaceholder, getPath, output, source };
