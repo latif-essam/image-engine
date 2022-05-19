@@ -1,10 +1,14 @@
+import path from "path";
 import { promises } from "fs";
 import { createCanvas } from "canvas";
+
+const getPath = (type: string): string =>
+  path.join(__dirname, `../../images/${type}`);
 
 const writeFiles = async (
   name: string,
   data: "string | Stream | ArrayBufferView | Iterable<string | ArrayBufferView> | AsyncIterable<string | ArrayBufferView>"
-): Promise<void> => await promises.writeFile(`images/output/${name}`, data);
+): Promise<void> => await promises.writeFile(`images/output/${name}.jpg`, data);
 
 const createPlaceholder = (width: number, height: number, color: string) => {
   const canvas = createCanvas(width, height);
@@ -17,8 +21,8 @@ const createPlaceholder = (width: number, height: number, color: string) => {
   context.textAlign = "center";
   context.fillStyle = "#fff";
   context.fillText("Placeholder Image", width / 2, height / 3);
-  context.fillText(`${width}x${height}px`, width / 2, height / 2);
+  context.fillText(`${width}x${height}_px`, width / 2, height / 2);
   return { context, canvas };
 };
 
-export { writeFiles, createPlaceholder };
+export { writeFiles, createPlaceholder, getPath };

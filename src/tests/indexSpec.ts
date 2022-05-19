@@ -2,7 +2,7 @@ import supertest from "supertest";
 import app from "./../index";
 const req = supertest(app);
 
-describe("Main Suite", () => {
+describe("Main Suite", async () => {
   it("Should display a response when visit / end-point amin route:", async () => {
     const res = await req.get("/");
     expect(res.status).toBe(200);
@@ -11,7 +11,7 @@ describe("Main Suite", () => {
     const res = await req.get("/api/lol");
     expect(res.status).toBe(302);
   });
-  it("Should display info route when clicking info link", async () => {
+  it("Should display info, when visiting /info route", async () => {
     const res = await req.get("/info");
     expect(res.status).toBe(200);
   });

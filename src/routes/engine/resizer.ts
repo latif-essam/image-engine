@@ -1,27 +1,34 @@
 import express from "express";
 import sharp from "sharp";
-import { writeFiles } from "../../helpers/utils";
+import { isImgAvailable } from "../../helpers/images";
+import { getPath, writeFiles } from "../../helpers/utils";
 
 const resizer = express.Router();
 
-resizer.get("/", async (req, res) => {
-  const { height, width, filename } = req.query;
-  // image full path and name with format
-  const path = `images/source/${filename}.jpg`;
-
-  const name = `${filename}_${width}x${height}px.jpg`;
-  sharp(path)
-    .resize(parseInt(width as string), parseInt(height as string))
-    .png()
-    .toBuffer()
-    .then((data) => {
-      writeFiles(name, data as never);
-      res.status(200).type("png").send(data);
-    })
-    .catch((err) => {
-      res.status(404).send(`
-      <p>🙂Error🤷‍♂️: there is no images with this name! =>> ${filename} 🙄<p>`);
+resizer.get("/", async (req: express.Request, res: express.Response) => {
+  try {
+    const { height, width, filename } = req.query;
+    const imgName = `${filename}_${width}x${height}px`;
+    const imgPath = `${getPath("source")}/${filename}.jpg`;
+    await isImgAvailable(imgName as string, getPath("output")).then((value) => {
+      if (value) {
+        const imgPath = `${getPath("output")}/${imgName}.jpg`;
+        res.type("jpg").sendFile(imgPath);
+      } else {
+        sharp(imgPath)
+          .resize(parseInt(width as string), parseInt(height as string))
+          .png()
+          .toBuffer()
+          .then((data) => {
+            writeFiles(imgName, data as never);
+            res.status(200).type("png").send(data);
+          });
+      }
     });
+  } catch (error) {
+    res.status(404).send(`
+        <p>🙂Error🤷‍♂️: =>> <br/>${error} 🙄<p>`);
+  }
 });
 
 export default resizer;
